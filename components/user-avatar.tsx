@@ -4,7 +4,6 @@ import { AvatarFallback } from '@radix-ui/react-avatar';
 
 export default function UserAvatar() {
 	const { user } = useUser();
-	console.log('User: ', user);
 	return (
 		<Avatar className='h-8 w-8 md:h-10 md:w-10'>
 			<AvatarImage src={user?.imageUrl} />
