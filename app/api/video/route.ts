@@ -1,12 +1,10 @@
 import { auth } from '@clerk/nextjs';
 import { NextResponse } from 'next/server';
-import { Configuration, OpenAIApi } from 'openai';
+import Replicate from 'replicate';
 
-const configuration = new Configuration({
-	apiKey: process.env.OPENAI_API_KEY,
+const replicate = new Replicate({
+	auth: process.env.REPLICATE_API_KEY!,
 });
-
-const openai = new OpenAIApi(configuration);
 
 export async function POST(req: Request) {
 	try {
@@ -19,7 +17,7 @@ export async function POST(req: Request) {
 		}
 
 		const body = await req.json();
-		const { prompt, imageCount, resolution } = body;
+		const { prompt } = body;
 
 		if (!prompt) {
 			return new NextResponse('Prompt is required', {
@@ -27,15 +25,13 @@ export async function POST(req: Request) {
 			});
 		}
 
-		const response = await openai.createImage({
-			prompt,
-			n: parseInt(imageCount),
-			size: resolution,
+		const response = await replicate.run('anotherjesse/zeroscope-v2-xl:9f747673945c62801b13b84701c783929c0ee784e4748ec062204894dda1a351', {
+			input: {
+				prompt,
+			},
 		});
 
-		const { data } = response.data;
-
-		return NextResponse.json(data);
+		return NextResponse.json(response);
 	} catch (e) {
 		console.log('Error in Conversation API: ', e);
 		return new NextResponse('Internal Server Error', { status: 500 });

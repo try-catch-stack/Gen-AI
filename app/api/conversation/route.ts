@@ -1,5 +1,4 @@
 import { auth } from '@clerk/nextjs';
-import { randomBytes } from 'crypto';
 import { NextResponse } from 'next/server';
 import { Configuration, OpenAIApi } from 'openai';
 

@@ -1,12 +1,10 @@
 import { auth } from '@clerk/nextjs';
 import { NextResponse } from 'next/server';
-import { Configuration, OpenAIApi } from 'openai';
+import Replicate from 'replicate';
 
-const configuration = new Configuration({
-	apiKey: process.env.OPENAI_API_KEY,
+const replicate = new Replicate({
+	auth: process.env.REPLICATE_API_KEY!,
 });
-
-const openai = new OpenAIApi(configuration);
 
 export async function POST(req: Request) {
 	try {
@@ -19,7 +17,7 @@ export async function POST(req: Request) {
 		}
 
 		const body = await req.json();
-		const { prompt, imageCount, resolution } = body;
+		const { prompt } = body;
 
 		if (!prompt) {
 			return new NextResponse('Prompt is required', {
@@ -27,15 +25,13 @@ export async function POST(req: Request) {
 			});
 		}
 
-		const response = await openai.createImage({
-			prompt,
-			n: parseInt(imageCount),
-			size: resolution,
+		const response = await replicate.run('riffusion/riffusion:8cf61ea6c56afd61d8f5b9ffd14d7c216c0a93844ce2d82ac1c9ecc9c7f24e05', {
+			input: {
+				prompt_a: prompt,
+			},
 		});
 
-		const { data } = response.data;
-
-		return NextResponse.json(data);
+		return NextResponse.json(response);
 	} catch (e) {
 		console.log('Error in Conversation API: ', e);
 		return new NextResponse('Internal Server Error', { status: 500 });
