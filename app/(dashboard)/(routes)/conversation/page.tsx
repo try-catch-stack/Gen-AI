@@ -80,7 +80,7 @@ export default function Conversation() {
 										<Input
 											placeholder='Which is the largest continent on Earth?'
 											{...field}
-											className='border-transparent focus-visible:ring-transparent'
+											className='border-transparent focus-visible:ring-transparent placeholder:text-gray-300'
 											disabled={isLoading}
 										/>
 									</FormControl>
@@ -88,7 +88,7 @@ export default function Conversation() {
 							)}
 						/>
 						<Button className='col-span-10 md:col-span-2 rounded-lg mx-0 mt-2 md:mx-2 md:mt-0' disabled={isLoading} type='submit'>
-							Generate
+							Send
 						</Button>
 					</form>
 				</Form>
@@ -100,7 +100,7 @@ export default function Conversation() {
 					messages.map((message) => (
 						<div
 							key={message.content}
-							className={cn('my-2 flex items-center space-x-2 p-4 rounded-md', message.role === 'user' ? 'bg-slate-300' : 'white')}
+							className={cn('my-2 flex items-center space-x-4 p-4 rounded-md', message.role === 'user' ? 'bg-slate-300' : 'white')}
 						>
 							{message.role === 'user' ? <UserAvatar /> : <AssistantAvatar />}
 							<div>{message.content}</div>
