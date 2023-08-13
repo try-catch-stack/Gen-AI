@@ -55,8 +55,8 @@ export default function VideoGeneration() {
 				title='Video Generation'
 				description='Generate videos using text'
 				icon={Video}
-				iconBgColor='bg-yellow-300/10'
-				iconColor='text-yellow-300'
+				iconBgColor='bg-yellow-400/10'
+				iconColor='text-yellow-400'
 			/>
 			<div className='my-4 px-2 py-2 border-slate-100 border rounded-md'>
 				<Form {...form}>

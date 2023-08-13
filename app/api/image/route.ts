@@ -2,6 +2,8 @@ import { auth } from '@clerk/nextjs';
 import { NextResponse } from 'next/server';
 import { Configuration, OpenAIApi } from 'openai';
 
+import { canUseFreeTier, increaseApiUsage } from '@/lib/api-limit';
+
 const configuration = new Configuration({
 	apiKey: process.env.OPENAI_API_KEY,
 });
@@ -21,21 +23,34 @@ export async function POST(req: Request) {
 		const body = await req.json();
 		const { prompt, imageCount, resolution } = body;
 
+		const count = parseInt(imageCount);
+
 		if (!prompt) {
 			return new NextResponse('Prompt is required', {
 				status: 400,
 			});
 		}
 
-		const response = await openai.createImage({
-			prompt,
-			n: parseInt(imageCount),
-			size: resolution,
-		});
+		const freeTierAvailable = await canUseFreeTier(count);
 
-		const { data } = response.data;
+		if (!freeTierAvailable) {
+			return new NextResponse('Free tier limit reached', {
+				status: 403,
+			});
+		}
 
-		return NextResponse.json(data);
+		// const response = await openai.createImage({
+		// 	prompt,
+		// 	n: count,
+		// 	size: resolution,
+		// });
+
+		await increaseApiUsage(count);
+
+		// const { data } = response.data;
+
+		// return NextResponse.json(data);
+		return NextResponse.json([]);
 	} catch (e) {
 		console.log('Error in Conversation API: ', e);
 		return new NextResponse('Internal Server Error', { status: 500 });

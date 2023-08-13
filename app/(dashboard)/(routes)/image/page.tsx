@@ -59,8 +59,8 @@ export default function ImageGeneration() {
 				title='Image Generation'
 				description='Turn your imagination into reality'
 				icon={MessageSquare}
-				iconBgColor='bg-red-300/10'
-				iconColor='text-red-300'
+				iconBgColor='bg-red-400/10'
+				iconColor='text-red-400'
 			/>
 			<div className='my-4 px-2 py-2 border-slate-100 border rounded-md'>
 				<Form {...form}>

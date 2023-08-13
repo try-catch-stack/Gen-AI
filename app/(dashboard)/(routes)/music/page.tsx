@@ -55,8 +55,8 @@ export default function MusicGeneration() {
 				title='Music Generation'
 				description='Create music using text'
 				icon={Music}
-				iconBgColor='bg-purple-300/10'
-				iconColor='text-purple-300'
+				iconBgColor='bg-purple-400/10'
+				iconColor='text-purple-400'
 			/>
 			<div className='my-4 px-2 py-2 border-slate-100 border rounded-md'>
 				<Form {...form}>
