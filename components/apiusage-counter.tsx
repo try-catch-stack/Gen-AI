@@ -9,10 +9,13 @@ import { Badge } from '@/components/ui/badge';
 import { MAX_FREE_TIER_USAGE, MAX_PRO_TIER_USAGE } from '@/constants';
 import { useProModal } from '@/hooks/useProModal';
 import axios from 'axios';
+import { useToast } from '@/components/ui/use-toast';
 
 export default function APIUsageCounter({ APIUsageCount, isSubscribed }: { APIUsageCount: number; isSubscribed: boolean }) {
 	const [mounted, setMounted] = useState(false);
 	const [loading, setLoading] = useState(false);
+
+	const { toast } = useToast();
 
 	const { openModal } = useProModal();
 
@@ -27,8 +30,13 @@ export default function APIUsageCounter({ APIUsageCount, isSubscribed }: { APIUs
 			setLoading(true);
 			const response = await axios.get('/api/subscribe');
 			window.location.href = response.data.url;
-		} catch (e) {
+		} catch (e: any) {
 			console.log(e);
+			toast({
+				title: 'Ops! An unexpected error occurred',
+				description: e?.message || 'Please try again later',
+				className: 'bg-red-500 text-white',
+			});
 		} finally {
 			setLoading(false);
 		}

@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import { Button } from './ui/button';
 import { Code, Image, MessageSquare, Music, Video, Zap } from 'lucide-react';
 import axios from 'axios';
+import { useToast } from '@/components/ui/use-toast';
 
 const montserrat = Montserrat({ subsets: ['latin'] });
 
@@ -48,6 +49,8 @@ export default function UpgradeToProModal() {
 	const [mounted, setMounted] = useState(false);
 	const [loading, setLoading] = useState(false);
 
+	const { toast } = useToast();
+
 	const { isOpen, closeModal } = useProModal();
 
 	useEffect(() => {
@@ -59,8 +62,13 @@ export default function UpgradeToProModal() {
 		try {
 			const response = await axios.get('/api/subscribe');
 			window.location.href = response.data.url;
-		} catch (e) {
+		} catch (e: any) {
 			console.log(e);
+			toast({
+				title: 'Ops! An unexpected error occurred',
+				description: e?.message || 'Please try again later',
+				className: 'bg-red-500 text-white',
+			});
 		} finally {
 			setLoading(false);
 		}

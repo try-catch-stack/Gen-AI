@@ -22,6 +22,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import UserAvatar from '@/components/user-avatar';
 import AssistantAvatar from '@/components/assistant-avatar';
 import { useProModal } from '@/hooks/useProModal';
+import { useToast } from '@/components/ui/use-toast';
 
 const montserrat = Montserrat({ subsets: ['latin'] });
 
@@ -29,6 +30,8 @@ export default function Conversation() {
 	const [messages, setMessages] = useState<ChatCompletionRequestMessage[]>([]);
 
 	const { openModal } = useProModal();
+
+	const { toast } = useToast();
 
 	const router = useRouter();
 
@@ -56,9 +59,15 @@ export default function Conversation() {
 
 			setMessages((current) => [...current, userMessage, response.data]);
 		} catch (e: any) {
+			console.log('Error: ', e);
 			if (e?.response?.status === 403) {
-				openModal();
+				return openModal();
 			}
+			toast({
+				title: 'Ops! An unexpected error occurred',
+				description: e?.message || 'Please try again later',
+				className: 'bg-red-500 text-white',
+			});
 		} finally {
 			router.refresh();
 		}

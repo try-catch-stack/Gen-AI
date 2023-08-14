@@ -18,6 +18,7 @@ import Empty from '@/components/empty';
 import { cn } from '@/lib/utils';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useProModal } from '@/hooks/useProModal';
+import { useToast } from '@/components/ui/use-toast';
 
 const montserrat = Montserrat({ subsets: ['latin'] });
 
@@ -25,6 +26,8 @@ export default function MusicGeneration() {
 	const [music, setMusic] = useState('');
 
 	const { openModal } = useProModal();
+
+	const { toast } = useToast();
 
 	const router = useRouter();
 
@@ -47,8 +50,13 @@ export default function MusicGeneration() {
 			form.reset();
 		} catch (e: any) {
 			if (e?.response?.status === 403) {
-				openModal();
+				return openModal();
 			}
+			toast({
+				title: 'Ops! An unexpected error occurred',
+				description: e?.message || 'Please try again later',
+				className: 'bg-red-500 text-white',
+			});
 		} finally {
 			router.refresh();
 		}

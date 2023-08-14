@@ -51,8 +51,13 @@ export default function ImageGeneration() {
 			form.reset();
 		} catch (e: any) {
 			if (e?.response?.status === 403) {
-				openModal();
+				return openModal();
 			}
+			toast({
+				title: 'Ops! An unexpected error occurred',
+				description: e?.message || 'Please try again later',
+				className: 'bg-red-500 text-white',
+			});
 		} finally {
 			router.refresh();
 		}

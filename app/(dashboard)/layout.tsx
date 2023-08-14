@@ -1,5 +1,6 @@
 import NavBar from '@/components/navbar';
 import SideBar from '@/components/sidebar';
+import { Toaster } from '@/components/ui/toaster';
 import { getAPIUsage } from '@/lib/api-limit';
 import { checkIsSubscribed } from '@/lib/user-subscription';
 
@@ -14,6 +15,7 @@ const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
 			</div>
 			<main className='md:pl-72'>
 				<NavBar />
+				<Toaster />
 				{children}
 			</main>
 		</div>
