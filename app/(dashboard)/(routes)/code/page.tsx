@@ -22,11 +22,14 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 import UserAvatar from '@/components/user-avatar';
 import AssistantAvatar from '@/components/assistant-avatar';
+import { useProModal } from '@/hooks/useProModal';
 
 const montserrat = Montserrat({ subsets: ['latin'] });
 
 export default function CodeGeneration() {
 	const [messages, setMessages] = useState<ChatCompletionRequestMessage[]>([]);
+
+	const { openModal } = useProModal();
 
 	const router = useRouter();
 
@@ -53,8 +56,10 @@ export default function CodeGeneration() {
 			});
 
 			setMessages((current) => [...current, userMessage, response.data]);
-		} catch (e) {
-			console.log(e);
+		} catch (e: any) {
+			if (e?.response?.status === 403) {
+				openModal();
+			}
 		} finally {
 			router.refresh();
 		}
@@ -79,7 +84,7 @@ export default function CodeGeneration() {
 								<FormItem className='col-span-10 md:col-span-8'>
 									<FormControl>
 										<Input
-											placeholder='Create a loading animation in React'
+											placeholder='How do I read a text file in Python?'
 											{...field}
 											className='border-transparent focus-visible:ring-transparent placeholder:text-gray-300'
 											disabled={isLoading}

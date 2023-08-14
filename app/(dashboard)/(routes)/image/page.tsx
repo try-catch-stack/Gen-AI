@@ -19,11 +19,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import PageHeader from '@/components/page-header';
 import { formSchema } from './constants';
 import Empty from '@/components/empty';
+import { useProModal } from '@/hooks/useProModal';
 
 const montserrat = Montserrat({ subsets: ['latin'] });
 
 export default function ImageGeneration() {
 	const [images, setImages] = useState<{ url: string }[]>([]);
+
+	const { openModal } = useProModal();
 
 	const router = useRouter();
 
@@ -46,8 +49,10 @@ export default function ImageGeneration() {
 			});
 			setImages(response.data);
 			form.reset();
-		} catch (e) {
-			console.log(e);
+		} catch (e: any) {
+			if (e?.response?.status === 403) {
+				openModal();
+			}
 		} finally {
 			router.refresh();
 		}

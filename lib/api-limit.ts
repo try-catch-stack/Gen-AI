@@ -1,7 +1,7 @@
 import { auth } from '@clerk/nextjs';
 
 import prismadb from './prismadb';
-import { MAX_FREE_TIER_USAGE } from '@/constants';
+import { MAX_FREE_TIER_USAGE, MAX_PRO_TIER_USAGE } from '@/constants';
 
 export const increaseApiUsage = async (increaseCount = 1) => {
 	const { userId } = auth();
@@ -35,7 +35,7 @@ export const increaseApiUsage = async (increaseCount = 1) => {
 	}
 };
 
-export const canUseFreeTier = async (increaseCount = 1) => {
+const isUsageWithinLimit = async (increaseCount = 1, limit = MAX_FREE_TIER_USAGE) => {
 	const { userId } = auth();
 
 	if (!userId) {
@@ -52,8 +52,12 @@ export const canUseFreeTier = async (increaseCount = 1) => {
 		return true;
 	}
 
-	return currentAPIUsage.count + increaseCount <= MAX_FREE_TIER_USAGE;
+	return currentAPIUsage.count + increaseCount <= limit;
 };
+
+export const canUseFreeTier = async (increaseCount = 1) => isUsageWithinLimit(increaseCount, MAX_FREE_TIER_USAGE);
+
+export const isSubscriptionValid = async (increaseCount = 1) => isUsageWithinLimit(increaseCount, MAX_PRO_TIER_USAGE);
 
 export const getAPIUsage = async () => {
 	const { userId } = auth();

@@ -6,6 +6,8 @@ import Link from 'next/link';
 import { Montserrat, Orbitron, Teko } from 'next/font/google';
 import { Bot, Code, Image, LayoutDashboard, MessageSquare, Music, Settings, Video } from 'lucide-react';
 import { usePathname } from 'next/navigation';
+import { Badge } from '@/components/ui/badge';
+
 import APIUsageCounter from '@/components/apiusage-counter';
 
 const spaceGrotesk = Orbitron({ subsets: ['latin'], weight: '700' });
@@ -14,6 +16,7 @@ const montserrat = Montserrat({ subsets: ['latin'], weight: '500' });
 
 interface SideBarProps {
 	currentAPIUsage: number;
+	isSubscribed: boolean;
 }
 
 const routes = [
@@ -53,15 +56,9 @@ const routes = [
 		icon: Code,
 		color: 'text-gray-400',
 	},
-	{
-		label: 'Settings',
-		href: '/settings',
-		icon: Settings,
-		color: 'text-white',
-	},
 ];
 
-export default function SideBar({ currentAPIUsage }: SideBarProps) {
+export default function SideBar({ currentAPIUsage, isSubscribed }: SideBarProps) {
 	const pathname = usePathname();
 
 	return (
@@ -72,6 +69,14 @@ export default function SideBar({ currentAPIUsage }: SideBarProps) {
 						<Bot size='28' />
 					</div>
 					<p className={cn('text-2xl font-bold text-white', spaceGrotesk.className)}>Gen AI</p>
+
+					{isSubscribed && (
+						<div className='mx-3 flex py-1'>
+							<Badge variant='pro' className='border-0'>
+								PRO
+							</Badge>
+						</div>
+					)}
 				</Link>
 			</div>
 			<div className='py-8 space-y-4 flex flex-col'>
@@ -90,7 +95,7 @@ export default function SideBar({ currentAPIUsage }: SideBarProps) {
 				))}
 			</div>
 			<div className={cn('h-full flex flex-col justify-end p-4', montserrat.className)}>
-				<APIUsageCounter APIUsageCount={currentAPIUsage} />
+				<APIUsageCounter isSubscribed={isSubscribed} APIUsageCount={currentAPIUsage} />
 			</div>
 		</div>
 	);

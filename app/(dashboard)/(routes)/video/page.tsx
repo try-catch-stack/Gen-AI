@@ -17,11 +17,14 @@ import { Button } from '@/components/ui/button';
 import Empty from '@/components/empty';
 import { cn } from '@/lib/utils';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useProModal } from '@/hooks/useProModal';
 
 const montserrat = Montserrat({ subsets: ['latin'] });
 
 export default function VideoGeneration() {
 	const [video, setVideo] = useState('');
+
+	const { openModal } = useProModal();
 
 	const router = useRouter();
 
@@ -42,8 +45,10 @@ export default function VideoGeneration() {
 			});
 			setVideo(response.data[0]);
 			form.reset();
-		} catch (e) {
-			console.log(e);
+		} catch (e: any) {
+			if (e?.response?.status === 403) {
+				openModal();
+			}
 		} finally {
 			router.refresh();
 		}

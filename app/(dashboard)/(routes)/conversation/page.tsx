@@ -21,11 +21,14 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 import UserAvatar from '@/components/user-avatar';
 import AssistantAvatar from '@/components/assistant-avatar';
+import { useProModal } from '@/hooks/useProModal';
 
 const montserrat = Montserrat({ subsets: ['latin'] });
 
 export default function Conversation() {
 	const [messages, setMessages] = useState<ChatCompletionRequestMessage[]>([]);
+
+	const { openModal } = useProModal();
 
 	const router = useRouter();
 
@@ -52,8 +55,10 @@ export default function Conversation() {
 			});
 
 			setMessages((current) => [...current, userMessage, response.data]);
-		} catch (e) {
-			console.log(e);
+		} catch (e: any) {
+			if (e?.response?.status === 403) {
+				openModal();
+			}
 		} finally {
 			router.refresh();
 		}
