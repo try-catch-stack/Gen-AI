@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { ClerkProvider } from '@clerk/nextjs';
 import UpgradeToProModal from '@/components/upgrade-modal';
+import CrispChat from '@/components/crisp-chat';
 
 const inter = Inter({ subsets: ['latin'] });
 

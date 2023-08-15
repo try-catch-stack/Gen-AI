@@ -7,6 +7,7 @@ import { Montserrat, Orbitron, Teko } from 'next/font/google';
 import { Bot, Code, Image, LayoutDashboard, MessageSquare, Music, Settings, Video } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { Badge } from '@/components/ui/badge';
+import NextImage from 'next/image';
 
 import APIUsageCounter from '@/components/apiusage-counter';
 
@@ -65,10 +66,8 @@ export default function SideBar({ currentAPIUsage, isSubscribed }: SideBarProps)
 		<div className='space-y-4 py-4 flex flex-col h-full'>
 			<div className='px-4 flex'>
 				<Link href='/dashboard' className='flex'>
-					<div className='mr-4 text-blue-300'>
-						<Bot size='28' />
-					</div>
-					<p className={cn('text-2xl font-bold text-white', spaceGrotesk.className)}>Gen AI</p>
+					<NextImage src={'/logo.png'} height='40' width='40' alt='Gen-AI' />
+					<p className={cn('text-2xl font-bold text-white mx-1', spaceGrotesk.className)}>Gen AI</p>
 
 					{isSubscribed && (
 						<div className='mx-3 flex py-1'>

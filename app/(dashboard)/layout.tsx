@@ -1,3 +1,4 @@
+import CrispChat from '@/components/crisp-chat';
 import NavBar from '@/components/navbar';
 import SideBar from '@/components/sidebar';
 import { Toaster } from '@/components/ui/toaster';
@@ -14,6 +15,7 @@ const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
 				<SideBar isSubscribed={isSubscribed} currentAPIUsage={currentAPIUsage} />
 			</div>
 			<main className='md:pl-72'>
+				<CrispChat />
 				<NavBar />
 				<Toaster />
 				{children}

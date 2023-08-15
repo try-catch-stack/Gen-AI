@@ -20,6 +20,7 @@ import PageHeader from '@/components/page-header';
 import { formSchema } from './constants';
 import Empty from '@/components/empty';
 import { useProModal } from '@/hooks/useProModal';
+import { useToast } from '@/components/ui/use-toast';
 
 const montserrat = Montserrat({ subsets: ['latin'] });
 
@@ -27,6 +28,8 @@ export default function ImageGeneration() {
 	const [images, setImages] = useState<{ url: string }[]>([]);
 
 	const { openModal } = useProModal();
+
+	const { toast } = useToast();
 
 	const router = useRouter();
 
